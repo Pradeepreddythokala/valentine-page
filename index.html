@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Love Proposal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            color: #fff;
+            overflow: hidden;
+            transition: background 1s ease, color 1s ease;
+        }
+
+            body.love-mode {
+                background: radial-gradient(circle at top, #ff9a9e, #fad0c4, #fcb045);
+                color: #111;
+            }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            position: relative;
+            display: inline-block;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 1rem;
+            margin: 0 10px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+        }
+
+        #yesBtn {
+            background: #28a745;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+            #yesBtn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(40, 167, 69, 0.8);
+            }
+
+        #noBtn {
+            position: absolute;
+            background: #dc3545;
+            color: #fff;
+            top: 0;
+            left: 120px;
+        }
+
+            #noBtn:hover {
+                transform: scale(1.02);
+            }
+
+        #yesBtn.selected {
+            background: #ffd700;
+            color: #111;
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .celebration {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            animation: fadeIn 1.2s ease forwards;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+            .celebration h2 {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+                color: #fff;
+                text-shadow: 0 0 10px #ff1493;
+            }
+
+            .celebration p {
+                margin-bottom: 20px;
+                color: #fff;
+                text-shadow: 0 0 8px #ff69b4;
+            }
+
+        .photo-frame {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            margin-bottom: 25px;
+            animation: pulse 2s infinite;
+        }
+
+            .photo-frame img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        .love-symbol {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+            font-weight: bold;
+            color: #fff;
+            background: radial-gradient(circle at 30% 30%, #ffdde1 0, #ff4b5c 40%, #c31432 100%);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating hearts background */
+        .heart {
+            position: fixed;
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, #ffdde1 0, #ff4b5c 60%, #c31432 100%);
+            transform: rotate(45deg);
+            animation: floatUp 6s linear infinite;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+            .heart::before,
+            .heart::after {
+                content: "";
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                background: inherit;
+                border-radius: 50%;
+            }
+
+            .heart::before {
+                top: -8px;
+                left: 0;
+            }
+
+            .heart::after {
+                left: -8px;
+                top: 0;
+            }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateY(-120vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContent">
+        <h1>Will you be my Valentine?</h1>
+        <p>I built this little page just for you. So… what do you say?</p>
+
+        <div class="buttons">
+            <button id="yesBtn">Yes 💖</button>
+            <button id="noBtn">No 😜</button>
+        </div>
+    </div>
+
+    <div class="celebration hidden" id="celebration">
+        <div class="photo-frame">
+            <div class="love-symbol">♥</div>
+        </div>
+
+        <h2>Yay! You said YES! 💘</h2>
+        <p>From this moment on, it’s you and me, forever and always.</p>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const body = document.body;
+        const mainContent = document.getElementById('mainContent');
+        const celebration = document.getElementById('celebration');
+
+        // Make the No button run away
+        noBtn.addEventListener('mouseenter', () => {
+            const containerRect = mainContent.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            const padding = 20;
+            const maxX = containerRect.width - btnRect.width - padding;
+            const maxY = containerRect.height - btnRect.height - padding;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
+
+         //When Yes is clicked
+        yesBtn.addEventListener('click', () => {
+            yesBtn.classList.add('selected');
+            body.classList.add('love-mode');
+            celebration.classList.remove('hidden');
+
+            //Optional: hide the original text & buttons
+            mainContent.style.opacity = '0';
+            mainContent.style.pointerEvents = 'none';
+
+            // Start floating hearts
+            startHearts();
+
+            // 🔥 Start confetti burst
+            heartConfettiBurst();
+        });
+
+        function startHearts() {
+            const heartInterval = setInterval(() => {
+                createHeart();
+            }, 300);
+
+            // Stop after some time if you want
+            setTimeout(() => clearInterval(heartInterval), 15000);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+
+            const size = Math.random() * 20 + 10;
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.bottom = '-20px';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        // 💥 Heart confetti burst from center
+        function heartConfettiBurst() {
+            const count = 80; // number of hearts in the burst
+
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+
+                const size = Math.random() * 14 + 8;
+                heart.style.width = size + 'px';
+                heart.style.height = size + 'px';
+
+                // Start near center of viewport
+                heart.style.left = '50vw';
+                heart.style.top = '50vh';
+                heart.style.animation = 'none'; // disable floatUp for burst
+
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = Math.random() * 250 + 80;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                const duration = Math.random() * 1.5 + 1.5;
+
+                heart.style.transition = `transform ${duration}s ease-out, opacity ${duration}s ease-out`;
+                heart.style.transform = 'translate(0, 0) rotate(45deg)';
+                heart.style.opacity = '1';
+
+                document.body.appendChild(heart);
+
+                requestAnimationFrame(() => {
+                    heart.style.transform = `translate(${x}px, ${y}px) rotate(45deg)`;
+                    heart.style.opacity = '0';
+                });
+
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000 + 200);
+            }
+        }
+    </script>
+</body>
+</html>
